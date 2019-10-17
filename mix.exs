@@ -1,8 +1,8 @@
 defmodule Forget.MixProject do
   use Mix.Project
 
-  def project do
-    [
+  def project,
+    do: [
       app: :forget,
       version: "0.1.0",
       elixir: "~> 1.9",
@@ -47,20 +47,18 @@ defmodule Forget.MixProject do
       name: "Forget",
       source_url: "https://github.com/MaethorNaur/forget"
     ]
-  end
 
-  defp elixirc_paths(env) when env in [:dev, :test], do: ["lib", "test/support"]
+  defp elixirc_paths(env) when env in [:test], do: ["lib", "test/support"]
   defp elixirc_paths(_env), do: ["lib"]
 
-  def application do
-    [
-      extra_applications: [:logger, :mnesia]
+  def application,
+    do: [
+      extra_applications: [:logger, :mnesia],
+      mod: {Forget.Application, []}
     ]
-  end
 
-  defp deps do
-    [
-      {:libcluster, "~> 3.1", optional: true},
+  defp deps,
+    do: [
       {:credo, "~> 1.1", only: [:dev], runtime: false},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.21", only: [:dev], runtime: false},
@@ -68,5 +66,4 @@ defmodule Forget.MixProject do
       {:excoveralls, "~> 0.11", only: [:dev, :test], runtime: false},
       {:inch_ex, "~> 2.0", only: [:dev], runtime: false}
     ]
-  end
 end

@@ -19,9 +19,12 @@ defmodule Forget.Supervisor do
   def start_link(args), do: Supervisor.start_link(__MODULE__, args, name: __MODULE__)
 
   @impl true
-  def init(config) do
-    children = [%{id: Forget.NodeMonitor, start: {Forget.NodeMonitor, :start_link, []}}]
-    [:visible, :this] |> Node.list() |> IO.inspect()
+  def init(_config) do
+    children = [
+      %{id: Forget.Supervisors.Global, start: {Forget.Supervisors.Global, :start_link, []}},
+      %{id: Forget.NodeMonitor, start: {Forget.NodeMonitor, :start_link, []}}
+    ]
+
     Supervisor.init(children, strategy: :one_for_one)
   end
 end
