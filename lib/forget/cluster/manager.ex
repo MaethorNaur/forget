@@ -37,7 +37,9 @@ defmodule Forget.Cluster.Manager do
 
     {:reply, :ok, state}
   end
+  defp bootstrapped? do
 
+  end
   defp add_node?(node) do
     case :mnesia.transaction(fn ->
            :mnesia.table_info(ProcessRegistry.table_name(), :active_replicas)
