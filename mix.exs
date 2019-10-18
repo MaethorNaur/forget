@@ -6,7 +6,8 @@ defmodule Forget.MixProject do
       app: :forget,
       version: "0.1.0",
       elixir: "~> 1.9",
-      elixirc_paths: elixirc_paths(Mix.env()),
+      elixirc_paths: ["lib"],
+      test_pattern: "*.test.exs",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
@@ -47,9 +48,6 @@ defmodule Forget.MixProject do
       name: "Forget",
       source_url: "https://github.com/MaethorNaur/forget"
     ]
-
-  defp elixirc_paths(env) when env in [:test], do: ["lib", "test/support"]
-  defp elixirc_paths(_env), do: ["lib"]
 
   def application,
     do: [

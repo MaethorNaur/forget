@@ -21,7 +21,10 @@ defmodule Forget.Supervisor do
   @impl true
   def init(_config) do
     children = [
-      %{id: Forget.Supervisors.Global, start: {Forget.Supervisors.Global, :start_link, []}},
+      %{
+        id: Forget.Cluster.ManagerSupervisor,
+        start: {Forget.Cluster.ManagerSupervisor, :start_link, []}
+      },
       %{id: Forget.NodeMonitor, start: {Forget.NodeMonitor, :start_link, []}}
     ]
 
