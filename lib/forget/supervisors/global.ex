@@ -9,12 +9,6 @@ defmodule Forget.Supervisors.Global do
   Monitor Global process and ensure there is always one process of a kind across the cluster
   """
 
-defmacro start(args) do
- quote do
-   GenServer.star 
-  end 
-end
-
   @doc """
   Start the `GenServer` 
   """
@@ -83,7 +77,10 @@ end
   def terminate(_reason, ets_table) do
     :ok =
       lazy_get_keys_from_ets_table(ets_table)
-      |> Stream.each(fn {_pid, ref} -> Process.demonitor(ref) end)
+      |> Stream.each(fn {pid, ref} ->
+        _ = Process.demonitor(ref)
+        _ = :proc_lib.stop(pid, :pid, :infinity)
+      end)
       |> Stream.run()
 
     true = :ets.delete(ets_table)
