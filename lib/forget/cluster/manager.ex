@@ -37,9 +37,14 @@ defmodule Forget.Cluster.Manager do
 
     {:reply, :ok, state}
   end
-  defp bootstrapped? do
+defp bootstrapped?(is_distributed \\ :distributed)
+  defp bootstrapped?(:local), do: :mnesia.system_info(:db_nodes) !=  
+  defp bootstrapped?(:distributed), do: :mnesia.system_info(:db_nodes) != [nodes()] 
+  # match?({:error, {node, {:already_exists, node}}}, :mnesia.create_schema(all_nodes))
 
-  end
+
+  defp all_nodes, do: Node.list([:visible, :this])
+
   defp add_node?(node) do
     case :mnesia.transaction(fn ->
            :mnesia.table_info(ProcessRegistry.table_name(), :active_replicas)
@@ -50,7 +55,8 @@ defmodule Forget.Cluster.Manager do
   end
 
   defp log({:aborted, reason}, context),
-  do: Logger.info(fn ->"[ClusterManager] #{context} - Adding node failed: #{inspect(reason)}" end)
+    do:
+      Logger.info(fn -> "[ClusterManager] #{context} - Adding node failed: #{inspect(reason)}" end)
 
   defp log(_result, _context), do: nil
 
