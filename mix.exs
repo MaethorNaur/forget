@@ -14,6 +14,7 @@ defmodule Forget.MixProject do
       deps: deps(),
       dialyzer: [
         plt_add_apps: [:mnesia],
+        # plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
         flags: [
           "-Wunmatched_returns",
           "-Werror_handling",
