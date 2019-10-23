@@ -1,12 +1,15 @@
 defmodule Forget.Application do
-  use Application
   require OK
-  import Forget.Errors
+  use Application
   @moduledoc false
   def start(_, _) do
     OK.for do
-      topologies <- Application.fetch_env(:libcluster, :topologies) |> wrap("Missing libcluster configuration")
+      topologies <-
+        Application.fetch_env(:libcluster, :topologies)
+        |> wrap("Missing libcluster configuration")
+
       config <- Application.fetch_env(:forget, :config) |> wrap("Missing forget configuration")
+
       children = [
         %{
           id: Forget.ClusterSupervisor,
@@ -24,4 +27,7 @@ defmodule Forget.Application do
       pid
     end
   end
+
+  defp wrap(:error, default), do: {:error, default}
+  defp wrap({:ok, _} = ok, _default), do: ok
 end
