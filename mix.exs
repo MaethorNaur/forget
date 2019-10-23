@@ -13,6 +13,7 @@ defmodule Forget.MixProject do
       test_coverage: [tool: ExCoveralls],
       deps: deps(),
       dialyzer: [
+        plt_add_apps: [:mnesia],
         flags: [
           "-Wunmatched_returns",
           "-Werror_handling",
@@ -51,12 +52,14 @@ defmodule Forget.MixProject do
 
   def application,
     do: [
-      extra_applications: [:logger, :mnesia],
+      extra_applications: [:logger],
       mod: {Forget.Application, []}
     ]
 
   defp deps,
     do: [
+      {:ok, "~> 2.3"},
+      {:libcluster, "~> 3.1"},
       {:credo, "~> 1.1", only: [:dev], runtime: false},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.21", only: [:dev], runtime: false},
