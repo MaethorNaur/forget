@@ -5,10 +5,8 @@ defmodule Forget.Application do
   @moduledoc false
   def start(_, _) do
     OK.for do
-      # topologies <- Application.fetch_env(:libcluster, :topologies) |> wrap("Missing libcluster configuration")
-      # config <- Application.fetch_env(:forget, :config) |> wrap("Missing forget configuration")
-      topologies = []
-      config = []
+      topologies <- Application.fetch_env(:libcluster, :topologies) |> wrap("Missing libcluster configuration")
+      config <- Application.fetch_env(:forget, :config) |> wrap("Missing forget configuration")
       children = [
         %{
           id: Forget.ClusterSupervisor,
@@ -23,7 +21,7 @@ defmodule Forget.Application do
 
       pid <- Supervisor.start_link(children, opts)
     after
-       pid
+      pid
     end
   end
 end
