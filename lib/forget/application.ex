@@ -1,14 +1,11 @@
 defmodule Forget.Application do
-  require OK
+  import OK, only: [success: 1, failure: 1, ~>>: 2]
   use Application
   @moduledoc false
   def start(_, _) do
     OK.for do
-      topologies <-
-        Application.fetch_env(:libcluster, :topologies)
-        |> wrap("Missing libcluster configuration")
-
-      config <- Application.fetch_env(:forget, :config) |> wrap("Missing forget configuration")
+      topologies <- fetch_env(:libcluster, :topologies)
+      config <- fetch_env(:forget, :configuration) ~>> Forget.Configuration.normalise()
 
       children = [
         %{
@@ -28,6 +25,10 @@ defmodule Forget.Application do
     end
   end
 
-  defp wrap(:error, default), do: {:error, default}
-  defp wrap({:ok, _} = ok, _default), do: ok
+  def fetch_env(application, key) do
+    case Application.fetch_env(application, key) do
+      :error -> failure("Missing #{application} configuration")
+      success -> success
+    end
+  end
 end
