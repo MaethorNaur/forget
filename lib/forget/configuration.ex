@@ -2,8 +2,9 @@ defmodule Forget.Configuration do
   import OK, only: [success: 1, failure: 1]
   @error failure("Not a valid forget configuration")
 
-  @type t :: [cluster: cluster()]
-  @typep cluster :: []
+  @type t :: [cluster: [cluster()]]
+  @typep cluster :: {:quorum, pos_integer()} | {:schema, storage_type()}
+  @typep storage_type :: :ram | :disc
 
   @spec normalise(config :: term()) :: {:ok, t()} | {:error, term()}
   def normalise(config) when is_list(config) do
@@ -14,6 +15,7 @@ defmodule Forget.Configuration do
       [cluster: normalised]
     end
   end
+
   def normalise(_config), do: @error
 
   defp wrap_error(:error), do: @error
@@ -22,6 +24,6 @@ defmodule Forget.Configuration do
   defp normalise_cluster?(cluster) when is_list(cluster) do
     {:ok, cluster}
   end
-  defp normalise_cluster?(_cluster), do: @error
 
+  defp normalise_cluster?(_cluster), do: @error
 end

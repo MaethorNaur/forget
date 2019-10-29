@@ -37,11 +37,11 @@ defmodule Forget.Cluster.Manager do
 
     {:reply, :ok, state}
   end
-# defp bootstrapped?(is_distributed \\ :distributed)
-  # defp bootstrapped?(:local), do: :mnesia.system_info(:db_nodes) !=
-  defp bootstrapped?(:distributed), do: :mnesia.system_info(:db_nodes) != [node()] 
-  # match?({:error, {node, {:already_exists, node}}}, :mnesia.create_schema(all_nodes))
 
+  # defp bootstrapped?(is_distributed \\ :distributed)
+  # defp bootstrapped?(:local), do: :mnesia.system_info(:db_nodes) !=
+  defp bootstrapped?(:distributed), do: :mnesia.system_info(:db_nodes) != [node()]
+  # match?({:error, {node, {:already_exists, node}}}, :mnesia.create_schema(all_nodes))
 
   defp all_nodes, do: Node.list([:visible, :this])
 
